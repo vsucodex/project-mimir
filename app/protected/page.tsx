@@ -16,6 +16,17 @@ async function UserDetails() {
   return JSON.stringify(data.claims, null, 2);
 }
 
+async function Instruments() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("instruments").select("*");
+
+  if (error) {
+    redirect("/auth/login");
+  }
+
+  return JSON.stringify(data, null, 2);
+}
+
 export default function ProtectedPage() {
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
@@ -31,6 +42,14 @@ export default function ProtectedPage() {
         <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
           <Suspense>
             <UserDetails />
+          </Suspense>
+        </pre>
+      </div>
+      <div>
+        <h2 className="font-bold text-2xl mb-4">Your instruments</h2>
+        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
+          <Suspense>
+            <Instruments />
           </Suspense>
         </pre>
       </div>
